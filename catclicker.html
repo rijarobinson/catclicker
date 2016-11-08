@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+        <link href="https://fonts.googleapis.com/css?family=Baloo+Da" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Lato:400,400italic,700,700italic,900,900italic" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="static/styles.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script src="https://apis.google.com/js/platform.js?onload=start"></script>
+    </head>
+    <body>
+
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-1">
+                </div>
+                <div class="col-md-5 text-center">
+                    <div id="kitkat">
+
+
+                    </div>
+                </div>
+                <div class="md-col-1">
+                </div>
+            </div>
+        </div>
+
+        <script>
+            var kitties = [];
+            var elementNo = 0;
+            var catName, catImage;
+            var howManyKitties = prompt("How many kitties do you want to see?", "2");
+                numberOfKitties = parseInt(howManyKitties);
+                if (numberOfKitties > 0) {
+                console.log("Number of Kittes: " + numberOfKitties);
+                for (i = 0; i < numberOfKitties; i++)
+                {
+                    elementNo = i + 1;
+                    catName = prompt("What's the name of kitty number " + elementNo + "?");
+                    catImage = prompt("What's the URL for " + catName +"'s image?");
+
+                    var div1 = document.createElement("div");
+                    div1.id = "cat-name" + elementNo;
+                    document.getElementById("kitkat").appendChild(div1);
+                    $(div1).text(catName);
+
+                    var div2 = document.createElement("div");
+                    div2.id = "cat-pic" + elementNo;
+                    document.getElementById("kitkat").appendChild(div2);
+
+                    var img = document.createElement("img");
+                    document.getElementById("cat-pic" + elementNo).appendChild(img);
+                    $('img').attr("src", catImage);
+
+                    var div3 = document.createElement("div");
+                    div3.id = "number-clicks" + elementNo;
+                    $(div3).text(0);
+                    document.getElementById("kitkat").appendChild(div3);
+                }
+            }
+        </script>
+
+        <script>
+            $('#cat-pic1').click(function(e) {
+                var currentClicks = parseInt($('#number-clicks1').text());
+/*              console.log("The value: " + currentClicks);*/
+                $('#number-clicks1').text(currentClicks + 1);
+/*              console.log("you clicked the cat picture");*/
+            });
+            $('#cat-pic2').click(function(e) {
+                var currentClicks = parseInt($('#number-clicks2').text());
+/*              console.log("The value: " + currentClicks);*/
+                $('#number-clicks2').text(currentClicks + 1);
+/*              console.log("you clicked the cat picture");*/
+            });
+        </script>
+    </body>
+</html>
