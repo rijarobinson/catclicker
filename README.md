@@ -14,7 +14,7 @@ This website is a practice page for JavaScript/jQuery.
 ##Using the Site
 **To run the site**, place all files in the same folder, open catclicker.html in a web browser.
 
-**To customize the files**, you can open the catclicker.html file in your favorite text editor and make changes as desired. You can review the references to bootstrap using the bootstrap.css file, but good practice is to make modifications/additions in a separate css file (in this case, you can change the style.css file). Save the files and refresh index.html to see your new web page.
+**To customize the files**, you can open the catclicker.html file in your favorite text editor and make changes as desired. You can make design modifications/additions in a separate css file (in this case, you can change the styles.css file). Save the files and refresh catclicker.html to see your new web page.
 
 Mockup/basic design ideas for this application were provided by [Udacity](http://www.Udacity.com). Additional instruction on Front End Development is available by signing up for a class on their site. Bootstrap provides the framework. Additional enhancements by Marija Robinson.
 
