@@ -1,7 +1,5 @@
 $(function(){
 
-
-
     var model = {
         init: function() {
             if (!kitties) {
@@ -9,18 +7,23 @@ $(function(){
                 var numberOfKitties = 0;
             }
             console.log("Model init executed.")
+            octopus.createKittyList(kitties, numberOfKitties);
         }
-    }
+    };
 
     var octopus = {
         init: function() {
             model.init();
-            viewList.init();
+        },
+
+        createKittyList: function(kitties, numberOfKitties) {
+            viewList.createKittyList(kitties, numberOfKitties);
         }
     };
 
     var viewList = {
-        init: function() {
+        createKittyList: function(kitties, numberOfKitties) {
+            console.log("kitties passed in: " + kitties);
             var elementNo = 0;
             var catName, catImage;
             var howManyKitties = prompt("How many kitties do you want to see?", "2");
@@ -31,19 +34,23 @@ $(function(){
                 {
                     elementNo = i + 1;
                     catName = prompt("What's the name of kitty number " + elementNo + "?");
-                    catImage = prompt("What's the URL for " + catName +"'s image?");
+                    catImage = prompt("What's the URL for " + catName +"'s image?", "http://www.placekitten.com/600/300");
+                    kitties.push([catName, catImage]);
+                    console.log("kitties: " + kitties);
+
+
 
                     var h2 = document.createElement("h2");
                     h2.id = "cat-name" + elementNo;
                     document.getElementById("kitkat").appendChild(h2);
-                    $(h2).text(catName);
+                    $(h2).text(kitties[i][0]);
 
                     var div2 = document.createElement("div");
                     div2.id = "cat-pic" + elementNo;
                     document.getElementById("kitkat").appendChild(div2);
 
                     var img = document.createElement("img");
-                    img.src = catImage;
+                    img.src = kitties[i][1];
                     img.style = "display: none;";
                     document.getElementById("cat-pic" + elementNo).appendChild(img);
 
@@ -97,7 +104,9 @@ $(function(){
             console.log("viewList init executed.")
        }
     }
-};
+
+
+        };
 
     octopus.init();
 });
