@@ -8,6 +8,24 @@ $(function(){
             }
             console.log("Model init executed.")
             octopus.createKittyList(kitties, numberOfKitties);
+        },
+        add: function(obj) {
+            var data = {
+                cats: []
+                };
+            for (var i in obj)
+            {
+                var cat = obj[i];
+
+                data.cats.push({
+                "catName": obj[i][0],
+                "catImage": obj[i][1],
+                "catClicks": 0
+            });
+            var catJSON = JSON.stringify(data);
+            console.log("record being logged: " + catJSON);
+            }
+            octopus.showKittyList(catJSON);
         }
     };
 
@@ -18,6 +36,14 @@ $(function(){
 
         createKittyList: function(kitties, numberOfKitties) {
             viewList.createKittyList(kitties, numberOfKitties);
+        },
+
+        getKittyList: function(kitties) {
+            model.add(kitties);
+        },
+
+        showKittyList: function(catJSON) {
+            viewList.showKittyList(catJSON);
         }
     };
 
@@ -37,10 +63,27 @@ $(function(){
                     catImage = prompt("What's the URL for " + catName +"'s image?", "http://www.placekitten.com/600/300");
                     kitties.push([catName, catImage]);
                     console.log("kitties: " + kitties);
+                    console.log("viewList init executed.")
+                }
+            }
+                    octopus.getKittyList(kitties);
+        },
+
+        showKittyList: function(catJSON) {
+            console.log("catJSON: " + catJSON)
+            console.log("catJSON length:" + catJSON.length)
+            for (var i = 0; 0 < catJSON.length; i++)
+            {
+            var h2 = document.createElement("h2");
+            h2.id = "cat-name" + String(i + 1);
+            document.getElementById("kitkat").appendChild(h2);
+            $(h2).text(catJSON[0].catName[0]);
+            console.log("catName: " + catJSON[0].catName[0]);
+            }
+        }
 
 
-
-                    var h2 = document.createElement("h2");
+/*                    var h2 = document.createElement("h2");
                     h2.id = "cat-name" + elementNo;
                     document.getElementById("kitkat").appendChild(h2);
                     $(h2).text(kitties[i][0]);
@@ -101,9 +144,7 @@ $(function(){
             }
     })(elementNo));
                 }
-            console.log("viewList init executed.")
-       }
-    }
+*/
 
 
         };
