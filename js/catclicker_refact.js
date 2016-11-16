@@ -10,23 +10,78 @@ $(function(){
             octopus.createKittyList(kitties, numberOfKitties);
         },
         add: function(obj) {
-            var data = {
-                cats: []
-                };
+            var data = [];
             for (var i in obj)
             {
-                var cat = obj[i];
 
-                data.cats.push({
+                data.push({
                 "catName": obj[i][0],
                 "catImage": obj[i][1],
                 "catClicks": 0
             });
-            var catJSON = JSON.stringify(data);
+            var catJSON = data;
             console.log("record being logged: " + catJSON);
             }
             octopus.showKittyList(catJSON);
-        }
+        },
+
+        clickCat: function(elementNo, catJSON) {
+                    $('#cat-name' + elementNo).click((function(numCopy)
+            {
+            return function() {
+                var currentClicks = parseInt($('#number-clicks' + numCopy).text());
+                $('#number-clicks' + numCopy).text(currentClicks + 1);
+/* tried to add something :), but needs work */
+
+                if ($('#selected-cat').children().length > 0)
+                {
+                    var source = $('#cat-pic' + numCopy).children().attr("src");
+                    $('#cat-pic-feat').children().attr("src", source);
+
+                    var selectedCatName = $('#cat-name' + numCopy).text();
+                    $('#cat-name-feat').text(selectedCatName);
+
+                    var selectedCatClicks = $('#number-clicks' + numCopy).text();
+                    $('#cat-clicks-feat').text(selectedCatClicks);
+
+                }
+                else
+                {
+
+                    var div5 = document.createElement("div");
+                    div5.id = "cat-name-feat";
+                    /*create the div to hold the cat's name*/
+                    document.getElementById("selected-cat").appendChild(div5);
+                    /*get the text from the selected cat's name */
+                    var selectedCatName = $('#cat-name' + numCopy).text();
+                    $('#cat-name-feat').text(selectedCatName);
+
+
+
+                    var div4 = document.createElement("div");
+                    div4.id = "cat-pic-feat";
+                    document.getElementById("selected-cat").appendChild(div4);
+
+                    var img = document.createElement("img");
+                    img.src = $('#cat-pic' + numCopy).children().attr("src");
+                    document.getElementById("cat-pic-feat").appendChild(img);
+
+
+                    var div6 = document.createElement("div");
+                    div6.id = "cat-clicks-feat";
+                    /*create the div to hold the cat's name*/
+                    document.getElementById("selected-cat").appendChild(div6);
+                    /*get the text from the selected cat's name */
+                    var selectedCatClicks = $('#number-clicks' + numCopy).text();
+                    $('#cat-clicks-feat').text(selectedCatClicks);
+
+
+            }
+                };
+            })(elementNo));
+
+
+}
     };
 
     var octopus = {
@@ -43,7 +98,15 @@ $(function(){
         },
 
         showKittyList: function(catJSON) {
-            viewList.showKittyList(catJSON);
+            viewList.render(catJSON);
+        },
+
+        nameClick: function(elementNo, catJSON) {
+            $('#cat-name' + elementNo).click(function() {alert("You clicked element: " + elementNo);
+        })
+
+            model.clickCat(elementNo, catJSON);
+
         }
     };
 
@@ -69,85 +132,43 @@ $(function(){
                     octopus.getKittyList(kitties);
         },
 
-        showKittyList: function(catJSON) {
+        render: function(catJSON) {
             console.log("catJSON: " + catJSON)
             console.log("catJSON length:" + catJSON.length)
-            for (var i = 0; 0 < catJSON.length; i++)
+            for (var i = 0; i < catJSON.length; i++)
             {
+            elementNo = i + 1;
             var h2 = document.createElement("h2");
-            h2.id = "cat-name" + String(i + 1);
+            h2.id = "cat-name" + elementNo;
             document.getElementById("kitkat").appendChild(h2);
-            $(h2).text(catJSON[0].catName[0]);
-            console.log("catName: " + catJSON[0].catName[0]);
+            $(h2).text(catJSON[i]["catName"]);
+            console.log("catName: " + catJSON[i]["catName"]);
+
+            var div2 = document.createElement("div");
+            div2.id = "cat-pic" + elementNo;
+            document.getElementById("kitkat").appendChild(div2);
+
+            var img = document.createElement("img");
+            img.src = catJSON[i]["catImage"];
+            img.style = "display: none;";
+            document.getElementById("cat-pic" + elementNo).appendChild(img);
+
+            var div3 = document.createElement("div");
+            div3.id = "number-clicks" + elementNo;
+            div3.style = "visibility: hidden;";
+            $(div3).text(catJSON[i]["catClicks"]);
+            document.getElementById("kitkat").appendChild(div3);
+
+            octopus.nameClick(elementNo, catJSON);
             }
         }
+    };
+
+    var viewSingleCat = {
+
+    }
 
 
-/*                    var h2 = document.createElement("h2");
-                    h2.id = "cat-name" + elementNo;
-                    document.getElementById("kitkat").appendChild(h2);
-                    $(h2).text(kitties[i][0]);
-
-                    var div2 = document.createElement("div");
-                    div2.id = "cat-pic" + elementNo;
-                    document.getElementById("kitkat").appendChild(div2);
-
-                    var img = document.createElement("img");
-                    img.src = kitties[i][1];
-                    img.style = "display: none;";
-                    document.getElementById("cat-pic" + elementNo).appendChild(img);
-
-                    var div3 = document.createElement("div");
-                    div3.id = "number-clicks" + elementNo;
-                    div3.style = "visibility: hidden;";
-                    $(div3).text(0);
-                    document.getElementById("kitkat").appendChild(div3);
-
-                   $('#cat-name' + elementNo).click((function(numCopy)
-            {
-            return function() {
-                var currentClicks = parseInt($('#number-clicks' + numCopy).text());
-                $('#number-clicks' + numCopy).text(currentClicks + 1);
-                if ($('#selected-cat').children().length > 0)
-                {
-                    var source = $('#cat-pic' + numCopy).children().attr("src");
-                    $('#cat-pic-feat').children().attr("src", source);
-
-                    var selectedCatName = $('#cat-name' + numCopy).text();
-                    $('#cat-name-feat').text(selectedCatName);
-
-                    var selectedCatClicks = $('#number-clicks' + numCopy).text();
-                    $('#cat-clicks-feat').text(selectedCatClicks);
-                }
-                else
-                {
-                    var div5 = document.createElement("div");
-                    div5.id = "cat-name-feat";
-                    document.getElementById("selected-cat").appendChild(div5);
-                    var selectedCatName = $('#cat-name' + numCopy).text();
-                    $('#cat-name-feat').text(selectedCatName);
-
-                    var div4 = document.createElement("div");
-                    div4.id = "cat-pic-feat";
-                    document.getElementById("selected-cat").appendChild(div4);
-
-                    var img = document.createElement("img");
-                    img.src = $('#cat-pic' + numCopy).children().attr("src");
-                    document.getElementById("cat-pic-feat").appendChild(img);
-
-                    var div6 = document.createElement("div");
-                    div6.id = "cat-clicks-feat";
-                    document.getElementById("selected-cat").appendChild(div6);
-                    var selectedCatClicks = $('#number-clicks' + numCopy).text();
-                    $('#cat-clicks-feat').text(selectedCatClicks);
-                }
-            }
-    })(elementNo));
-                }
-*/
-
-
-        };
 
     octopus.init();
 });
