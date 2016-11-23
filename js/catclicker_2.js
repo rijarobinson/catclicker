@@ -109,24 +109,62 @@ var showSingleCat = {
             $('#cat-name-feat').text(selectedCatName);
             $('#cat-clicks-feat').text(selectedCatClicks);
 
-            $('#admin').css("display","block");
+            $('#admin').css("display", "inline");
 
             $('#admin').click(function() {
-                var editName = document.createElement("input");
-                var editPicURL = document.createElement("input");
-                var editCatClicks = document.createElement("input");
+                if ($('#edit-fields').children().length > 0) {
+                    $("#cat-name-edit").css("display", "block");
+                    $("#cat-pic-edit").css("display", "block");
+                    $("#cat-clicks-edit").css("display", "block");
 
-                editName.id = "cat-name-edit";
-                editPicURL.id =  "cat-pic-edit";
-                editCatClicks.id = "cat-clicks-edit";
+                    $('#save').css("display", "inline");
+                    $('#cancel').css("display", "inline");
+                    $('#hide').css("display", "inline");
 
-                document.getElementById("edit-fields").appendChild(editName);
-                document.getElementById("edit-fields").appendChild(editPicURL);
-                document.getElementById("edit-fields").appendChild(editCatClicks);
+                }
+                else {
+                    var editName = document.createElement("input");
+                    var editPicURL = document.createElement("input");
+                    var editCatClicks = document.createElement("input");
 
-                $("#cat-name-edit").attr("value", selectedCat.catName);
-                $("#cat-pic-edit").attr("value", selectedCat.catImage);
-                $("#cat-clicks-edit").attr("value", selectedCat.catClicks);
+                    editName.id = "cat-name-edit";
+                    editPicURL.id =  "cat-pic-edit";
+                    editCatClicks.id = "cat-clicks-edit";
+
+                    document.getElementById("edit-fields").appendChild(editName);
+                    document.getElementById("edit-fields").appendChild(editPicURL);
+                    document.getElementById("edit-fields").appendChild(editCatClicks);
+
+                    $("#cat-name-edit").attr("value", selectedCat.catName);
+                    $("#cat-pic-edit").attr("value", selectedCat.catImage);
+                    $("#cat-clicks-edit").attr("value", selectedCat.catClicks);
+
+                    $('#save').css("display", "inline");
+                    $('#cancel').css("display", "inline");
+                    $('#hide').css("display", "inline");
+
+                    $("#cat-name-edit").css("display", "block");
+                    $("#cat-pic-edit").css("display", "block");
+                    $("#cat-clicks-edit").css("display", "block");
+
+}
+
+            });
+
+            $('#cancel').click(function() {
+                $("#cat-name-edit").val(selectedCat.catName);
+                $("#cat-pic-edit").val(selectedCat.catImage);
+                $("#cat-clicks-edit").val(selectedCat.catClicks);
+
+            });
+
+            $('#hide').click(function() {
+                $("#cat-name-edit").css("display", "none");
+                $("#cat-pic-edit").css("display", "none");
+                $("#cat-clicks-edit").css("display", "none");
+                $('#save').css("display", "none");
+                $('#cancel').css("display", "none");
+                $('#hide').css("display", "none");
 
             });
 
