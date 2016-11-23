@@ -35,6 +35,29 @@ var octopus = {
     addClick:function() {
         model.selectedCat.catClicks++;
         showSingleCat.render();
+    },
+
+    updateCat:function(updateCatName,updateCatPic,updateCatClicks,catId,theCats) {
+
+        console.log("theCats before changes: " + JSON.stringify(theCats));
+        console.log("theSelectedCat in updateCat function: " + JSON.stringify(model.selectedCat));
+
+        model.selectedCat.catName = updateCatName;
+        model.selectedCat.catImage = updateCatPic;
+        model.selectedCat.catClicks = updateCatClicks;
+
+        console.log("updatedSelectedCat: " + JSON.stringify(model.selectedCat));
+        console.log('translation : ' + catId);
+
+
+/*        theCats.kitties[catId].catName = updateCatName;
+        theCats.kitties[catId].catImage = updateCatPic;
+        theCats.kitties[catId].catClicks = updateCatClicks;
+
+*/        console.log("theCats: " + JSON.stringify(theCats));
+
+        viewList.render(theCats);
+        showSingleCat.render();
     }
 };
 
@@ -46,10 +69,11 @@ var view = {
         if (numberOfKitties > 0) {
             for (var i = 0; i < numberOfKitties; i++)
             {
+                var catId = i;
                 var catClicks = 0;
                 var catName = prompt("What's the name of kitty number " + (i + 1) + "?");
                 var catImage = prompt("What's the URL for " + catName +"'s image?", "http://www.placekitten.com/600/300");
-                kittyList.push({catName, catImage, catClicks});
+                kittyList.push({catName, catImage, catClicks, catId});
             }
         octopus.addKitties(kittyList);
         }
@@ -58,6 +82,9 @@ var view = {
 
 var viewList = {
         render: function(theCats) {
+            if ($("#kitkat").children().length > 0) {
+                $("#kitkat").children().remove();
+            }
             for (var i = 0; i < theCats.kitties.length; i++) {
                 kitty = theCats.kitties[i];
                 var h2 = document.createElement("h2");
@@ -67,8 +94,15 @@ var viewList = {
 
                 $('#cat-name' + i).click(function(kittyCopy) {
                     return function() {
+                        if ($('#edit-fields').children().length > 0) {
+                            $("#edit-fields").children().remove();
+                            $('#save').css("display", "none");
+                            $('#cancel').css("display", "none");
+                            $('#hide').css("display", "none");
+                        }
                         octopus.setSelectedCat(kittyCopy);
-                        showSingleCat.render();
+                        console.log("kittyCopy being passed: " + JSON.stringify(kittyCopy));
+                        showSingleCat.render(theCats);
                 };
                 }(kitty));
             }
@@ -76,11 +110,14 @@ var viewList = {
 };
 
 var showSingleCat = {
-    render:function() {
+    render:function(theCats) {
         var selectedCat = octopus.getSelectedCat();
+        console.log("selectedCat when showSingleCat inititates: " + JSON.stringify(selectedCat));
         var selectedCatName = selectedCat.catName;
         var selectedCatClicks = selectedCat.catClicks;
         var source = selectedCat.catImage;
+        var catId = selectedCat.catId;
+        var allCats = theCats;
 
         if ($('#selected-cat').children().length > 0) {
 
@@ -110,45 +147,42 @@ var showSingleCat = {
             $('#cat-clicks-feat').text(selectedCatClicks);
 
             $('#admin').css("display", "inline");
+        }
+
 
             $('#admin').click(function() {
-                if ($('#edit-fields').children().length > 0) {
-                    $("#cat-name-edit").css("display", "block");
-                    $("#cat-pic-edit").css("display", "block");
-                    $("#cat-clicks-edit").css("display", "block");
-
-                    $('#save').css("display", "inline");
-                    $('#cancel').css("display", "inline");
-                    $('#hide').css("display", "inline");
-
+                if ($("#edit-fields").children().length > 0) {
+                    $("#cat-name-edit").remove();
+                    $("#cat-pic-edit").remove();
+                    $("#cat-clicks-edit").remove();
                 }
-                else {
-                    var editName = document.createElement("input");
-                    var editPicURL = document.createElement("input");
-                    var editCatClicks = document.createElement("input");
+/*                var selectedCat = octopus.getSelectedCat();
+*//* this console log goes 3 times!*/
+                console.log("selectedCat: " + JSON.stringify(selectedCat));
 
-                    editName.id = "cat-name-edit";
-                    editPicURL.id =  "cat-pic-edit";
-                    editCatClicks.id = "cat-clicks-edit";
+                var editName = document.createElement("input");
+                var editPicURL = document.createElement("input");
+                var editCatClicks = document.createElement("input");
 
-                    document.getElementById("edit-fields").appendChild(editName);
-                    document.getElementById("edit-fields").appendChild(editPicURL);
-                    document.getElementById("edit-fields").appendChild(editCatClicks);
+                editName.id = "cat-name-edit";
+                editPicURL.id =  "cat-pic-edit";
+                editCatClicks.id = "cat-clicks-edit";
 
-                    $("#cat-name-edit").attr("value", selectedCat.catName);
-                    $("#cat-pic-edit").attr("value", selectedCat.catImage);
-                    $("#cat-clicks-edit").attr("value", selectedCat.catClicks);
+                document.getElementById("edit-fields").appendChild(editName);
+                document.getElementById("edit-fields").appendChild(editPicURL);
+                document.getElementById("edit-fields").appendChild(editCatClicks);
 
-                    $('#save').css("display", "inline");
-                    $('#cancel').css("display", "inline");
-                    $('#hide').css("display", "inline");
+                $("#cat-name-edit").attr("value", selectedCat.catName);
+                $("#cat-pic-edit").attr("value", selectedCat.catImage);
+                $("#cat-clicks-edit").attr("value", selectedCat.catClicks);
 
-                    $("#cat-name-edit").css("display", "block");
-                    $("#cat-pic-edit").css("display", "block");
-                    $("#cat-clicks-edit").css("display", "block");
+                $('#save').css("display", "inline");
+                $('#cancel').css("display", "inline");
+                $('#hide').css("display", "inline");
 
-}
-
+                $("#cat-name-edit").css("display", "block");
+                $("#cat-pic-edit").css("display", "block");
+                $("#cat-clicks-edit").css("display", "block");
             });
 
             $('#cancel').click(function() {
@@ -159,19 +193,36 @@ var showSingleCat = {
             });
 
             $('#hide').click(function() {
-                $("#cat-name-edit").css("display", "none");
-                $("#cat-pic-edit").css("display", "none");
-                $("#cat-clicks-edit").css("display", "none");
+                $("#cat-name-edit").remove();
+                $("#cat-pic-edit").remove();
+                $("#cat-clicks-edit").remove();
                 $('#save').css("display", "none");
                 $('#cancel').css("display", "none");
                 $('#hide').css("display", "none");
 
             });
 
+             $('#save').click(function() {
+                var updateCatName = $("#cat-name-edit").val();
+                var updateCatPic = $("#cat-pic-edit").val();
+                var updateCatClicks = $("#cat-clicks-edit").val();
+
+                $("#cat-name-edit").remove();
+                $("#cat-pic-edit").remove();
+                $("#cat-clicks-edit").remove();
+                $('#save').css("display", "none");
+                $('#cancel').css("display", "none");
+                $('#hide').css("display", "none");
+
+                octopus.updateCat(updateCatName,updateCatPic,updateCatClicks,catId,allCats);
+
+
+
+            });
+
             $('#cat-pic-feat').click(function() {
                 octopus.addClick();
             });
-        }
     }
 };
 
